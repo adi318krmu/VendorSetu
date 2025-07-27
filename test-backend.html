@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #f8f9fa; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    
+    <div class="test-section">
+        <h3>1. Test Backend Server</h3>
+        <button onclick="testBackendConnection()">Test Connection</button>
+        <div id="backend-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Test Vendor Registration</h3>
+        <button onclick="testVendorRegistration()">Test Vendor Registration</button>
+        <div id="vendor-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Test Supplier Registration</h3>
+        <button onclick="testSupplierRegistration()">Test Supplier Registration</button>
+        <div id="supplier-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>4. Test Get All Vendors</h3>
+        <button onclick="testGetVendors()">Get Vendors</button>
+        <div id="vendors-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>5. Test Get All Suppliers</h3>
+        <button onclick="testGetSuppliers()">Get Suppliers</button>
+        <div id="suppliers-result"></div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        async function testBackendConnection() {
+            const resultDiv = document.getElementById('backend-result');
+            try {
+                const response = await fetch('http://localhost:3000/');
+                const text = await response.text();
+                resultDiv.innerHTML = `<div class="success">✅ Backend is running! Response: ${text}</div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Backend connection failed: ${error.message}</div>`;
+            }
+        }
+
+        async function testVendorRegistration() {
+            const resultDiv = document.getElementById('vendor-result');
+            try {
+                const vendorData = {
+                    name: 'Test Vendor',
+                    email: 'testvendor@example.com',
+                    password: 'password123'
+                };
+                const result = await apiService.createVendor(vendorData);
+                resultDiv.innerHTML = `<div class="success">✅ Vendor created successfully!<pre>${JSON.stringify(result, null, 2)}</pre></div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Vendor registration failed: ${error.message}</div>`;
+            }
+        }
+
+        async function testSupplierRegistration() {
+            const resultDiv = document.getElementById('supplier-result');
+            try {
+                const supplierData = {
+                    name: 'Test Supplier',
+                    email: 'testsupplier@example.com',
+                    password: 'password123',
+                    company: 'Test Company'
+                };
+                const result = await apiService.createSupplier(supplierData);
+                resultDiv.innerHTML = `<div class="success">✅ Supplier created successfully!<pre>${JSON.stringify(result, null, 2)}</pre></div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Supplier registration failed: ${error.message}</div>`;
+            }
+        }
+
+        async function testGetVendors() {
+            const resultDiv = document.getElementById('vendors-result');
+            try {
+                const vendors = await apiService.getVendors();
+                resultDiv.innerHTML = `<div class="success">✅ Vendors retrieved successfully!<pre>${JSON.stringify(vendors, null, 2)}</pre></div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Failed to get vendors: ${error.message}</div>`;
+            }
+        }
+
+        async function testGetSuppliers() {
+            const resultDiv = document.getElementById('suppliers-result');
+            try {
+                const suppliers = await apiService.getSuppliers();
+                resultDiv.innerHTML = `<div class="success">✅ Suppliers retrieved successfully!<pre>${JSON.stringify(suppliers, null, 2)}</pre></div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Failed to get suppliers: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html> 
